@@ -57,6 +57,7 @@ export default class AutoCompleteInput extends React.Component {
         let { results } = data;
         if (results.length > 0) {
           let { formatted_address } = results[0];
+          formatted_address=formatted_address.replace('Unnamed Road',this.props.notFoundRoadName)
           this.setState({ text: formatted_address });
         }
       });
@@ -124,10 +125,10 @@ export default class AutoCompleteInput extends React.Component {
         <View style={styles.textInputContainer} elevation={5}>
           <TextInput
             ref={input => (this._input = input)}
-            value={this.state.loading ? 'Loading...' : this.state.text}
+            value={this.state.loading ? this.props.placeholderLoading : this.state.text}
             style={styles.textInput}
             underlineColorAndroid={'transparent'}
-            placeholder={'Search'}
+            placeholder={this.props.placeholderInput}
             onFocus={this._onFocus}
             onBlur={this._onBlur}
             onChangeText={this._onChangeText}

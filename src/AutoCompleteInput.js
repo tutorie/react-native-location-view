@@ -75,6 +75,7 @@ export default class AutoCompleteInput extends React.Component {
             key: this.props.apiKey,
             language: this.props.language,
             components: this.props.components.join('|'),
+            types: ["locality", "sublocality"]
           },
         })
         .then(({ data }) => {

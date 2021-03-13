@@ -27,6 +27,7 @@ export default class LocationView extends React.Component {
     actionText: PropTypes.string,
     onLocationSelect: PropTypes.func,
     debounceDuration: PropTypes.number,
+    types: PropTypes.array,
     components: PropTypes.arrayOf(PropTypes.string),
     timeout: PropTypes.number,
     maximumAge: PropTypes.number,
@@ -158,6 +159,7 @@ export default class LocationView extends React.Component {
             debounceDuration={this.props.debounceDuration}
             language={this.props.language}
             components={this.props.components}
+            types={this.props.types}
             placeholderInput={this.props.placeholderInput}
             placeholderLoading={this.props.placeholderLoading}
             notFoundRoadName={this.props.notFoundRoadName}          />

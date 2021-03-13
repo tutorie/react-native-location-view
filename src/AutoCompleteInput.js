@@ -49,7 +49,7 @@ export default class AutoCompleteInput extends React.Component {
     let { latitude, longitude } = location;
     this.source = CancelToken.source();
     axios
-      .get(`${REVRSE_GEO_CODE_URL}?key=${this.props.apiKey}&latlng=${latitude},${longitude}&result_type=${this.props.result_type.join('|')}`, {
+      .get(`${REVRSE_GEO_CODE_URL}?key=${this.props.apiKey}&latlng=${latitude},${longitude}&result_type=route&location_type=ROOFTOP`, {
         cancelToken: this.source.token,
       })
       .then(({ data }) => {

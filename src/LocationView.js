@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
 import Events from 'react-native-simple-events';
 import MapView from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import AutoCompleteInput from './AutoCompleteInput';
 
 
@@ -20,7 +20,7 @@ export default class LocationView extends React.Component {
     initialLocation: PropTypes.shape({
       latitude: PropTypes.number,
       longitude: PropTypes.number,
-    }),
+    }).isRequired,
     markerColor: PropTypes.string,
     actionButtonStyle: ViewPropTypes.style,
     actionTextStyle: Text.propTypes.style,
@@ -55,7 +55,6 @@ export default class LocationView extends React.Component {
     Events.listen('InputBlur', this.constructor.displayName, this._onTextBlur);
     Events.listen('InputFocus', this.constructor.displayName, this._onTextFocus);
     Events.listen('PlaceSelected', this.constructor.displayName, this._onPlaceSelected);
-    this._getCurrentLocation()
   }
 
   componentWillUnmount() {
@@ -104,7 +103,6 @@ export default class LocationView extends React.Component {
   _setRegion = (region, animate = true) => {
     this.state.region = { ...this.state.region, ...region };
     if (animate) this._map.animateToRegion(this.state.region);
-    
   };
 
   _onPlaceSelected = placeId => {
@@ -117,13 +115,18 @@ export default class LocationView extends React.Component {
   };
 
   _getCurrentLocation = () => {
+    const { timeout, maximumAge, enableHighAccuracy } = this.props;
     Geolocation.getCurrentPosition(
       position => {
         const { latitude, longitude } = position.coords;
         this._setRegion({latitude, longitude});
       },
       error => console.log(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 0, forceRequestLocation: true}
+      {
+        enableHighAccuracy,
+        timeout,
+        maximumAge,
+      }
     );
   };
 
@@ -134,7 +137,7 @@ export default class LocationView extends React.Component {
         <MapView
           ref={mapView => (this._map = mapView)}
           style={styles.mapView}
-          region={null}
+          region={this.state.region}
           showsMyLocationButton={true}
           showsUserLocation={false}
           onPress={({ nativeEvent }) => this._setRegion(nativeEvent.coordinate)}
@@ -157,8 +160,7 @@ export default class LocationView extends React.Component {
             components={this.props.components}
             placeholderInput={this.props.placeholderInput}
             placeholderLoading={this.props.placeholderLoading}
-            notFoundRoadName={this.props.notFoundRoadName}
-          />
+            notFoundRoadName={this.props.notFoundRoadName}          />
         </View>
         <TouchableOpacity
           style={[styles.currentLocBtn, { backgroundColor: this.props.markerColor }]}

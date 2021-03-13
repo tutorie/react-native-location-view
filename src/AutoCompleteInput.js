@@ -57,7 +57,8 @@ export default class AutoCompleteInput extends React.Component {
         let { results } = data;
         if (results.length > 0) {
           let { formatted_address } = results[0];
-          formatted_address=formatted_address.replace('Unnamed Road',this.props.notFoundRoadName)
+          formatted_address = formatted_address.split(",")[0]
+          formatted_address = formatted_address.replace('Unnamed Road', this.props.notFoundRoadName)
           this.setState({ text: formatted_address });
         }
       });
